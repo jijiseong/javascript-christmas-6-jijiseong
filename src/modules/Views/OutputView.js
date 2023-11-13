@@ -1,5 +1,5 @@
 import { Console } from '@woowacourse/mission-utils';
-import { MESSAGE } from '../../constants/message';
+import { MESSAGE, TITLE } from '../../constants/message';
 
 const OutputView = {
   printEventGuide(date) {
@@ -7,7 +7,7 @@ const OutputView = {
   },
 
   printOrderMenu(menus) {
-    Console.print('<주문 메뉴>');
+    Console.print(TITLE.orderMenu);
     Object.entries(menus).forEach(([name, amount]) => {
       Console.print(`${name} ${amount}개`);
     });
@@ -15,6 +15,11 @@ const OutputView = {
 
   print(message) {
     Console.print(message);
+  },
+
+  printTotalPrice(price) {
+    Console.print(TITLE.totalPrice);
+    Console.print(`${price.toLocaleString()}원`);
   },
 };
 

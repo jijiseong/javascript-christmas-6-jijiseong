@@ -26,6 +26,8 @@ class GameController {
   print({ date, menus }) {
     this.#outputView.printEventGuide(date);
     this.#outputView.printOrderMenu(menus);
+    const totalPrice = this.#restaurant.calculateTotalPrice(menus);
+    this.#outputView.printTotalPrice(totalPrice);
   }
 }
 
