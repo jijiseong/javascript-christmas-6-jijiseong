@@ -1,25 +1,38 @@
 import { Console } from '@woowacourse/mission-utils';
 import { MESSAGE, TITLE } from '../../constants/message';
+import LINE_SEPARATOR from '../../constants/lineSeparator';
 
 const OutputView = {
+  printLine(message) {
+    Console.print(`${message}`);
+  },
+  printDiscount({ title, price }) {
+    if (price !== 0) this.printLine(`${title}: -${price.toLocaleString()}원`);
+  },
+
   printEventGuide(date) {
-    Console.print(MESSAGE.noticeEvents(date));
+    this.printLine(MESSAGE.noticeEvents(date));
   },
 
   printOrderMenu(menus) {
-    Console.print(TITLE.orderMenu);
+    this.printLine(TITLE.orderMenu);
     Object.entries(menus).forEach(([name, amount]) => {
-      Console.print(`${name} ${amount}개`);
+      this.printLine(`${name} ${amount}개`);
     });
   },
 
-  print(message) {
-    Console.print(message);
+  printTotalPrice(price) {
+    this.printLine(TITLE.totalPrice);
+    this.printLine(`${price.toLocaleString()}원`);
   },
 
-  printTotalPrice(price) {
-    Console.print(TITLE.totalPrice);
-    Console.print(`${price.toLocaleString()}원`);
+  printGiveaway(giveaway) {
+    this.printLine(TITLE.giveaway);
+    if (giveaway === MESSAGE.none) {
+      this.printLine(MESSAGE.none);
+      return;
+    }
+    this.printLine(`${giveaway} 1개`);
   },
 };
 
