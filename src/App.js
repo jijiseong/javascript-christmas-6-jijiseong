@@ -1,41 +1,70 @@
+import EventCalculator from './modules/Models/EventCalculator';
+import OutputView from './modules/Views/OutputView';
+import InputView from './modules/Views/InputView';
+import { MESSAGE, TITLE } from './constants/message';
+import { validateDate, validateMenus } from './utils/validator';
+import Restaurant from './modules/Models/Restaurant';
+import Badge from './modules/Models/Badge';
+import MENU from './constants/menu';
+
 import callWithErrorHandler from './utils/callWithErrorHandler';
-import GameController from './modules/Models/GameController';
 
 class App {
-  #gameController = new GameController();
+  #inputView = InputView;
 
+  #outputView = OutputView;
+
+  #restaurant = new Restaurant(MENU);
+
+  #eventCalculator = EventCalculator;
+
+  // eslint-disable-next-line max-lines-per-function
   async run() {
-    const { date, menus } = await this.#inputFromUser();
-    this.#printInfo({ date, menus });
-    this.#printEventDiscounts({ date, menus });
-  }
+    const date = await callWithErrorHandler(async () => {
+      const input = await this.#inputView.readDate();
+      validateDate(input);
+      return input;
+    }, this);
 
-  async #inputFromUser() {
-    const date = await callWithErrorHandler(
-      this.#gameController.takeDate,
-      this.#gameController,
-    );
-    const menus = await callWithErrorHandler(
-      this.#gameController.takeOrder,
-      this.#gameController,
-    );
+    const menus = await callWithErrorHandler(async () => {
+      const input = await this.#inputView.readMenus();
+      validateMenus(this.#restaurant, input);
+      return input;
+    }, this);
 
-    return { date, menus };
-  }
+    this.#outputView.printEventGuide(date);
+    this.#outputView.printOrderMenu(menus);
 
-  #printInfo({ date, menus }) {
-    this.#gameController.printEventGuide(date);
-    this.#gameController.printOrderMenu(menus);
-    this.#gameController.printTotalPrice(menus);
-    this.#gameController.printGiveaway(menus);
-  }
+    const totalPrice = this.#restaurant.calculateTotalPrice(menus);
+    this.#outputView.printLine(TITLE.totalPrice);
+    this.#outputView.printLine(`${totalPrice.toLocaleString()}원`);
 
-  #printEventDiscounts({ date, menus }) {
-    const discounts = this.#gameController.calculateEventDiscounts({
-      date,
-      menus,
-    });
-    this.#gameController.printEventDiscounts(discounts);
+    const discounts = this.#eventCalculator.getAllDiscounts({ date, menus });
+    const giveaway = this.#eventCalculator.getGiveaway(menus);
+
+    this.#outputView.printLine(TITLE.giveaway);
+    this.#outputView.printGiveaway(giveaway.name);
+
+    this.#outputView.printLine(TITLE.event);
+
+    const totalDiscount = this.#eventCalculator.getTotalDiscount(discounts);
+    if (totalDiscount === 0) {
+      this.#outputView.printLine(MESSAGE.none);
+    } else {
+      this.#outputView.printAllDiscouts(discounts);
+    }
+
+    const eventPrice = totalDiscount + giveaway.price;
+    this.#outputView.printLine(TITLE.discount);
+    this.#outputView.printLine(`${-eventPrice.toLocaleString()}원`);
+
+    const discountedTotalPrice = totalPrice - totalDiscount;
+    this.#outputView.printLine(TITLE.discountedTotalPrice);
+    this.#outputView.printLine(`${discountedTotalPrice.toLocaleString()}원`);
+
+    const badge = new Badge(eventPrice);
+    this.#outputView.printLine(TITLE.badge);
+    this.#outputView.printLine(badge.getBadgeTitle());
   }
 }
 

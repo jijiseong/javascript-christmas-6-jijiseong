@@ -5,6 +5,7 @@ import GIVEAWAY from '../../constants/giveaway';
 import DISCOUNT from '../../constants/discount';
 import { EVENT_TITLE, MESSAGE } from '../../constants/message';
 import Restaurant from './Restaurant';
+import sum from '../../utils/sum';
 
 const EventCalculator = {
   getAllDiscounts({ date, menus }) {
@@ -24,7 +25,7 @@ const EventCalculator = {
   getChristmasDiscount(date) {
     if (date > 25) return 0;
 
-    const discount = DISCOUNT.christmas + date * DISCOUNT.christmasDDay;
+    const discount = DISCOUNT.christmas + (date - 1) * DISCOUNT.christmasDDay;
     return discount;
   },
 
@@ -64,6 +65,10 @@ const EventCalculator = {
       return { name: MESSAGE.none, price: 0 };
     }
     return { name: GIVEAWAY.menu, price: MENU[GIVEAWAY.menu] };
+  },
+
+  getTotalDiscount(discounts) {
+    return sum(Object.values(discounts));
   },
 };
 

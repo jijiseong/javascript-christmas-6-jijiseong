@@ -46,11 +46,6 @@ class GameController {
     return discounts;
   }
 
-  calculateGiveaway(menus) {
-    const giveaway = this.#eventCalculator.getGiveaway(menus);
-    return giveaway;
-  }
-
   printGiveaway(menus) {
     const giveaway = this.#eventCalculator.getGiveaway(menus);
     this.#outputView.printGiveaway(giveaway.name);

@@ -4,7 +4,7 @@ async function callWithErrorHandler(fn, context) {
   try {
     return await fn.call(context);
   } catch (error) {
-    OutputView.print(error.message);
+    OutputView.printLine(error.message);
     return callWithErrorHandler(fn, context);
   }
 }
