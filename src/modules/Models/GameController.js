@@ -1,70 +1,83 @@
-import MENU from '../../constants/menu';
-import { MESSAGE, TITLE } from '../../constants/message';
-import { validateDate, validateMenus } from '../../utils/validator';
-import InputView from '../Views/InputView';
-import OutputView from '../Views/OutputView';
-import EventCalculator from './EventCalculator';
+import Badge from './Badge';
 import Restaurant from './Restaurant';
-import sum from '../../utils/sum';
+import EventCalculator from './EventCalculator';
+import callWithErrorHandler from '../../utils/callWithErrorHandler';
+import { validateDate, validateMenus } from '../../utils/validator';
+import { MESSAGE, TITLE } from '../../constants/message';
+import MENU from '../../constants/menu';
 
 class GameController {
-  #inputView = InputView;
-
-  #outputView = OutputView;
-
   #restaurant = new Restaurant(MENU);
 
   #eventCalculator = EventCalculator;
 
-  async takeDate() {
-    const date = await this.#inputView.readDate();
-    validateDate(date);
-    return date;
+  async askDateAndMenus(inputView) {
+    const date = await callWithErrorHandler(async () => {
+      const input = await inputView.readDate();
+      validateDate(input);
+      return input;
+    }, this);
+
+    const menus = await callWithErrorHandler(async () => {
+      const input = await inputView.readMenus();
+      validateMenus(this.#restaurant, input);
+      return input;
+    }, this);
+
+    return { date, menus };
   }
 
-  async takeOrder() {
-    const menus = await this.#inputView.readMenus();
-    validateMenus(this.#restaurant, menus);
-    return menus;
-  }
-
-  printEventGuide(date) {
-    this.#outputView.printEventGuide(date);
-  }
-
-  printOrderMenu(menus) {
-    this.#outputView.printOrderMenu(menus);
-  }
-
-  printTotalPrice(menus) {
+  printOrderInfo(date, menus, outputView) {
     const totalPrice = this.#restaurant.calculateTotalPrice(menus);
-    this.#outputView.printTotalPrice(totalPrice);
+    outputView.printEventGuide(date);
+    outputView.printOrderMenu(menus);
+    outputView.printLine(TITLE.totalPrice);
+    outputView.printLine(`${totalPrice.toLocaleString()}원`);
   }
 
-  calculateEventDiscounts({ date, menus }) {
-    const discounts = this.#eventCalculator.getAllDiscounts({ date, menus });
-    return discounts;
-  }
-
-  printGiveaway(menus) {
+  printGiveaway(menus, outputView) {
     const giveaway = this.#eventCalculator.getGiveaway(menus);
-    this.#outputView.printGiveaway(giveaway.name);
+    outputView.printLine(TITLE.giveaway);
+    outputView.printGiveaway(giveaway.name);
   }
 
-  printEventDiscounts(discounts) {
-    const discountTotal = sum(Object.values(discounts));
-
-    this.#outputView.printLine(TITLE.event);
-    if (discountTotal === 0) {
-      this.#outputView.printLine(MESSAGE.none);
-      return;
+  printEventInfo(date, menus, outputView) {
+    const discounts = this.#eventCalculator.getAllDiscounts({ date, menus });
+    outputView.printLine(TITLE.event);
+    const totalDiscount = this.#eventCalculator.getTotalDiscount(discounts);
+    if (totalDiscount === 0) {
+      outputView.printLine(MESSAGE.none);
+    } else {
+      outputView.printAllDiscouts(discounts);
     }
-    Object.entries(discounts).forEach(([title, price]) => {
-      this.#outputView.printDiscount({
-        title,
-        price,
-      });
-    });
+  }
+
+  printTotalEventDiscount(date, menus, outputView) {
+    const discounts = this.#eventCalculator.getAllDiscounts({ date, menus });
+    const totalDiscount = this.#eventCalculator.getTotalDiscount(discounts);
+    const giveaway = this.#eventCalculator.getGiveaway(menus);
+    const eventPrice = totalDiscount + giveaway.price;
+    outputView.printLine(TITLE.discount);
+    outputView.printLine(`${(-eventPrice).toLocaleString()}원`);
+  }
+
+  printDiscountedTotalPrice(date, menus, outputView) {
+    const discounts = this.#eventCalculator.getAllDiscounts({ date, menus });
+    const totalPrice = this.#restaurant.calculateTotalPrice(menus);
+    const totalDiscount = this.#eventCalculator.getTotalDiscount(discounts);
+    const discountedTotalPrice = totalPrice - totalDiscount;
+    outputView.printLine(TITLE.discountedTotalPrice);
+    outputView.printLine(`${discountedTotalPrice.toLocaleString()}원`);
+  }
+
+  printBadge(date, menus, outputView) {
+    const discounts = this.#eventCalculator.getAllDiscounts({ date, menus });
+    const totalDiscount = this.#eventCalculator.getTotalDiscount(discounts);
+    const giveaway = this.#eventCalculator.getGiveaway(menus);
+    const eventPrice = totalDiscount + giveaway.price;
+    const badge = new Badge(eventPrice);
+    outputView.printLine(TITLE.badge);
+    outputView.printLine(badge.getBadgeTitle());
   }
 }
 
