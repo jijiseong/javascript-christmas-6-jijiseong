@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 
 import MENU from '../src/constants/menu';
-import Restaurant from '../src/modules/Models/Restaurant';
+import Restaurant from '../src/Models/Restaurant';
 
 describe('Restaurant 객체 테스트', () => {
   let restaurant = new Restaurant();

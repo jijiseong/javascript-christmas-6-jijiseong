@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import GIVEAWAY from '../src/constants/giveaway';
 import MENU from '../src/constants/menu';
-import EventCalculator from '../src/modules/Models/EventCalculator';
+import EventCalculator from '../src/Models/EventCalculator';
 
 describe('EventCalculator 객체 테스트', () => {
   const eventCalculator = EventCalculator;

@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
 import { BADGE_TITLE } from '../src/constants/badge';
-import Badge from '../src/modules/Models/Badge';
+import Badge from '../src/Models/Badge';
 
 describe('Badge 객체 테스트', () => {
   test.each([

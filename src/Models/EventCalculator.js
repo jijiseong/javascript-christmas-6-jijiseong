@@ -1,11 +1,11 @@
-import MENU, { DESERT_MENU, MAIN_MENU } from '../../constants/menu';
-import SPECIAL_DAY from '../../constants/specialDay';
-import isWeekend from '../../utils/isWeekend';
-import GIVEAWAY from '../../constants/giveaway';
-import DISCOUNT from '../../constants/discount';
-import { EVENT_TITLE, MESSAGE } from '../../constants/message';
+import MENU, { DESERT_MENU, MAIN_MENU } from '../constants/menu';
+import SPECIAL_DAY from '../constants/specialDay';
+import isWeekend from '../utils/isWeekend';
+import GIVEAWAY from '../constants/giveaway';
+import DISCOUNT from '../constants/discount';
+import { EVENT_TITLE, MESSAGE } from '../constants/message';
 import Restaurant from './Restaurant';
-import sum from '../../utils/sum';
+import sum from '../utils/sum';
 
 const EventCalculator = {
   getAllDiscounts({ date, menus }) {

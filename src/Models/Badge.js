@@ -1,5 +1,5 @@
-import { BADGE_BOUND, BADGE_TITLE } from '../../constants/badge';
-import { MESSAGE } from '../../constants/message';
+import { BADGE_BOUND, BADGE_TITLE } from '../constants/badge';
+import { MESSAGE } from '../constants/message';
 
 class Badge {
   #eventPrice;

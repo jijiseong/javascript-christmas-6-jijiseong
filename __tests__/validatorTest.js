@@ -1,7 +1,7 @@
 /* eslint-disable max-lines-per-function */
 import MENU from '../src/constants/menu';
 import { ERROR_MESSAGE } from '../src/constants/message';
-import Restaurant from '../src/modules/Models/Restaurant';
+import Restaurant from '../src/Models/Restaurant';
 import { validateDate, validateMenus } from '../src/utils/validator';
 
 describe('유저 입력 검증 로직 테스트', () => {

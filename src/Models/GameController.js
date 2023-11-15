@@ -1,11 +1,11 @@
 import Badge from './Badge';
 import Restaurant from './Restaurant';
 import EventCalculator from './EventCalculator';
-import callWithErrorHandler from '../../utils/callWithErrorHandler';
-import { validateDate, validateMenus } from '../../utils/validator';
-import { MESSAGE, TITLE } from '../../constants/message';
-import MENU from '../../constants/menu';
-
+import callWithErrorHandler from '../utils/callWithErrorHandler';
+import { validateDate, validateMenus } from '../utils/validator';
+import { MESSAGE, TITLE } from '../constants/message';
+import MENU from '../constants/menu';
+MENU;
 class GameController {
   #restaurant = new Restaurant(MENU);
 

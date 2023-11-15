@@ -1,4 +1,4 @@
-import OutputView from '../modules/Views/OutputView';
+import OutputView from '../Views/OutputView';
 
 async function callWithErrorHandler(fn, context) {
   try {

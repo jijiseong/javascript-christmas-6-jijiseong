@@ -1,6 +1,6 @@
-import GameController from './modules/Models/GameController';
-import OutputView from './modules/Views/OutputView';
-import InputView from './modules/Views/InputView';
+import GameController from './Models/GameController';
+import OutputView from './Views/OutputView';
+import InputView from './Views/InputView';
 
 class App {
   #inputView = InputView;
