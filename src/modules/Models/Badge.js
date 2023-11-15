@@ -9,13 +9,13 @@ class Badge {
   }
 
   getBadgeTitle() {
-    if (this.#eventPrice > BADGE_BOUND.santa) {
+    if (this.#eventPrice >= BADGE_BOUND.santa) {
       return BADGE_TITLE.santa;
     }
-    if (this.#eventPrice > BADGE_BOUND.tree) {
+    if (this.#eventPrice >= BADGE_BOUND.tree) {
       return BADGE_TITLE.tree;
     }
-    if (this.#eventPrice > BADGE_BOUND.star) {
+    if (this.#eventPrice >= BADGE_BOUND.star) {
       return BADGE_TITLE.star;
     }
 
