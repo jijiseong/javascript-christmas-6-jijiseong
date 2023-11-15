@@ -1,8 +1,11 @@
 import { ERROR_MESSAGE } from '../constants/message';
+import sum from './sum';
 
 export function validateMenus(restaurant, menus) {
   const menuNames = Object.keys(menus);
-  const menuAmounts = Object.values(menus);
+  const menuAmounts = Object.values(menus).map(Number);
+
+  if (sum(menuAmounts) > 20) throw new Error(ERROR_MESSAGE.invalidMenu);
 
   menuNames.forEach(name => {
     if (!restaurant.hasMenu(name)) throw new Error(ERROR_MESSAGE.invalidMenu);

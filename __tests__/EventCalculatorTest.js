@@ -5,9 +5,7 @@ import EventCalculator from '../src/modules/Models/EventCalculator';
 
 describe('EventCalculator 객체 테스트', () => {
   const eventCalculator = EventCalculator;
-  // given
-  // when
-  // then
+
   test('크리스마스 할인 계산', () => {
     // given
     const date = 5;
