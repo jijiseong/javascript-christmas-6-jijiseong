@@ -5,7 +5,6 @@ const InputView = {
   async readDate() {
     const input = await Console.readLineAsync(MESSAGE.requireDate);
     const date = Number(input);
-
     return date;
   },
 
@@ -18,7 +17,6 @@ const InputView = {
       const [name, amount] = menu.split('-');
       result[name] = amount;
     });
-
     return result;
   },
 };
